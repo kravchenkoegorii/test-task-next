@@ -4,15 +4,17 @@ import {useRouter} from 'next/navigation';
 import {deletePost} from "@/app/api/post.api";
 
 interface DeleteButtonProps {
-    postId: string;
+    postId: string | null;
 }
 
 const DeleteButton: React.FC<DeleteButtonProps> = ({postId}) => {
     const router = useRouter();
 
     const handleDelete = async () => {
-        await deletePost(postId);
-        router.push('/');
+        if (postId) {
+            await deletePost(postId);
+            router.push('/');
+        }
     };
 
     return (
