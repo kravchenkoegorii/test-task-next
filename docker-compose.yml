@@ -1,0 +1,52 @@
+version: '3.9'
+
+services:
+  blog-frontend:
+    build:
+      context: client
+      dockerfile: Dockerfile
+    ports:
+      - '4000:4000'
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+    depends_on:
+      - blog-backend
+    networks:
+      - blog-network
+
+  blog-backend:
+    build:
+      context: server
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      PORT: 3000
+      MONGODB_HOST: blog-mongodb
+      MONGODB_PORT: 27017
+      MONGODB_USER: user
+      MONGODB_PASSWORD: pass
+      MONGODB_DATABASE: blogdb
+      CLIENT_URL: http://localhost:4000
+    depends_on:
+      - blog-mongodb
+    networks:
+      - blog-network
+
+  blog-mongodb:
+    image: mongo:latest
+    container_name: blog-mongodb
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: admin
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - blog-network
+    restart: always
+
+networks:
+  blog-network:

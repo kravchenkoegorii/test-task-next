@@ -17,7 +17,7 @@ export const fetchPosts = async (limit?: number, page?: number): Promise<any> =>
         }
         throw new Error(JSON.stringify(data.message));
     } catch (e) {
-        console.error('Failed to fetch posts.', e);
+        console.error('Failed to fetch posts:', e);
         return [];
     }
 };
@@ -87,7 +87,7 @@ export const uploadImage = async (formData: FormData): Promise<any> => {
         }
         throw new Error(JSON.stringify(data.message));
     } catch (error) {
-        console.error('Failed to upload image', error);
+        console.error('Failed to upload image:', error);
         throw error;
     }
 }
@@ -104,7 +104,7 @@ export const deleteImage = async (id: string): Promise<any> => {
         }
         throw new Error(JSON.stringify(data.message));
     } catch (error) {
-        console.error('Failed to delete image', error);
+        console.error('Failed to delete image:', error);
         throw error;
     }
 }
@@ -125,7 +125,7 @@ export const createPost = async (post: any): Promise<any> => {
         }
         throw new Error(JSON.stringify(data.message));
     } catch (error) {
-        console.error('Failed to create post', error);
+        console.error('Failed to create post:', error);
         throw error;
     }
 }
@@ -146,7 +146,7 @@ export const updatePost = async (id: string, post: any): Promise<any> => {
         }
         throw new Error(JSON.stringify(data.message));
     } catch (error) {
-        console.error('Failed to update post', error);
+        console.error('Failed to update post:', error);
         throw error;
     }
 }
