@@ -13,5 +13,10 @@ export class CreatePostDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
+  image: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   description: string;
 }

@@ -4,6 +4,7 @@ import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 import * as process from 'node:process';
 import mongoConfig from './config/mongo/mongo.config';
 import { PostModule } from './modules/post/post.module';
+import { ImageModule } from './modules/image/image.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PostModule } from './modules/post/post.module';
       inject: [ConfigService],
     }),
     PostModule,
+    ImageModule,
   ],
   controllers: [],
   providers: [],

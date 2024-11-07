@@ -3,24 +3,13 @@ import {
   Controller,
   Delete,
   Get,
-  MaxFileSizeValidator,
   Param,
-  ParseFilePipe,
   Patch,
   Post,
   Query,
-  UploadedFile,
-  UseInterceptors,
 } from '@nestjs/common';
-import {
-  ApiBody,
-  ApiConsumes,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PostService } from './post.service';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { CreatePostDto } from '../../shared/dto/create-post.dto';
 import { UpdatePostDto } from '../../shared/dto/update-post.dto';
 
@@ -69,34 +58,15 @@ export class PostController {
     return await this.postService.updatePost(id, updatePostDto);
   }
 
-  @Post(':id/image')
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiOperation({ summary: 'Upload image for post' })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        file: {
-          type: 'string',
-          format: 'binary',
-        },
-      },
-    },
-  })
-  @ApiConsumes('multipart/form-data')
-  @ApiResponse({ status: 200, description: 'Image uploaded successfully' })
+  @Patch(':id/image')
+  @ApiOperation({ summary: 'Set image to post' })
+  @ApiResponse({ status: 200, description: 'Image set successfully' })
   @ApiResponse({ status: 404, description: 'Post not found' })
-  async uploadImage(
+  async setImageToPost(
     @Query('id') id: string,
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [new MaxFileSizeValidator({ maxSize: 10 * 1024 * 1024 })], // Max 10 MB
-      }),
-    )
-    file: Express.Multer.File,
+    @Param('imageId') image: string,
   ) {
-    const bufferImage = file.buffer;
-    const updatedPost = await this.postService.addImageToPost(id, bufferImage);
+    const updatedPost = await this.postService.addImageToPost(id, image);
     return { success: !!updatedPost };
   }
 

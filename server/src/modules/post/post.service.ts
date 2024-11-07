@@ -4,11 +4,13 @@ import { Post, PostDocument } from '../../data-access/post.entity';
 import { Model } from 'mongoose';
 import { CreatePostDto } from '../../shared/dto/create-post.dto';
 import { UpdatePostDto } from '../../shared/dto/update-post.dto';
+import { ImageService } from '../image/image.service';
 
 @Injectable()
 export class PostService {
   public constructor(
     @InjectModel(Post.name) private postModel: Model<PostDocument>,
+    private readonly imageService: ImageService,
   ) {}
 
   public async createPost(createPostDto: CreatePostDto): Promise<Post> {
@@ -20,11 +22,11 @@ export class PostService {
   }
 
   public async getAllPosts(): Promise<Post[]> {
-    return await this.postModel.find().exec();
+    return await this.postModel.find().populate('image').exec();
   }
 
   public async getPostById(id: string): Promise<PostDocument> {
-    const post = await this.postModel.findById(id).exec();
+    const post = await this.postModel.findById(id).populate('image').exec();
 
     if (!post) {
       throw new NotFoundException(`Post not found`);
@@ -49,18 +51,24 @@ export class PostService {
   }
 
   public async deletePost(id: string): Promise<PostDocument | null> {
-    const post = await this.postModel.findByIdAndDelete(id).exec();
+    const post = await this.postModel.findById(id).populate('image').exec();
 
     if (!post) {
       throw new NotFoundException('Post not found');
     }
+
+    if (post.image) {
+      await this.imageService.deleteImage(post?.image?._id.toString());
+    }
+
+    await this.postModel.deleteOne({ _id: id }).exec();
 
     return post;
   }
 
   public async addImageToPost(
     id: string,
-    image: Buffer,
+    image: string,
   ): Promise<PostDocument> {
     const updatedPost = await this.postModel
       .findByIdAndUpdate(id, { image }, { new: true })
