@@ -8,15 +8,48 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { CreatePostDto } from '../../shared/dto/create-post.dto';
 import { UpdatePostDto } from '../../shared/dto/update-post.dto';
+import { PaginationResponse } from '../../shared/dto/pagination.response';
+import { Post as PostEntity } from '../../data-access/post.entity';
+import { BulkDeleteBody } from '../../shared/dto/bulk-delete.body';
 
 @ApiTags('posts')
 @Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
+
+  @Post('bulk-delete')
+  @ApiOperation({ summary: 'Bulk delete posts' })
+  @ApiBody({
+    type: BulkDeleteBody,
+  })
+  @ApiResponse({ status: 200, description: 'Posts deleted successfully' })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  async bulkDeletePosts(@Body() body: BulkDeleteBody) {
+    const deletedCount = await this.postService.bulkDeletePosts(body);
+    return { success: true, deletedCount };
+  }
+
+  @Patch('bulk-update')
+  @ApiOperation({ summary: 'Bulk update posts' })
+  @ApiResponse({ status: 200, description: 'Posts updated successfully' })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  async bulkUpdatePosts(
+    @Body()
+    body: { id: string; updateData: Partial<UpdatePostDto> }[],
+  ) {
+    const updatedCount = await this.postService.bulkUpdatePosts(body);
+    return { success: true, updatedCount };
+  }
 
   @Post()
   @ApiOperation({ summary: 'Create a new post' })
@@ -32,8 +65,13 @@ export class PostController {
   @Get()
   @ApiOperation({ summary: 'Fetch all posts' })
   @ApiResponse({ status: 200, description: 'Fetched all posts' })
-  async getAllPosts() {
-    return await this.postService.getAllPosts();
+  @ApiQuery({ name: 'page', required: false })
+  @ApiQuery({ name: 'limit', required: false })
+  async getAllPosts(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ): Promise<PaginationResponse | PostEntity[]> {
+    return await this.postService.getAllPosts(page, limit);
   }
 
   @Get(':id')

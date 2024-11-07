@@ -15,7 +15,6 @@ export class ImageService {
     mimeType: string,
   ): Promise<ImageDocument> {
     const newImage = new this.imageModel({ filename, buffer, mimeType });
-
     return await newImage.save();
   }
 
@@ -37,5 +36,12 @@ export class ImageService {
     }
 
     return image;
+  }
+
+  async bulkDeleteImages(ids: string[]): Promise<number> {
+    const result = await this.imageModel
+      .deleteMany({ _id: { $in: ids } })
+      .exec();
+    return result.deletedCount || 0;
   }
 }

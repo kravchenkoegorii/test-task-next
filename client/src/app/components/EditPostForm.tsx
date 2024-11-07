@@ -68,7 +68,7 @@ const EditPostForm: React.FC<EditPostFormProps> = ({post, initialImage, onCancel
             <div>
                 <p className="font-semibold">Current Image Preview:</p>
                 <img src={previewImage ? previewImage : undefined} alt="Current preview"
-                     className="w-full max-h-64 object-contain rounded-md"/>
+                     className="w-full max-h-64 object-contain rounded-lg my-4"/>
                 <input
                     type="file"
                     accept="image/*"
