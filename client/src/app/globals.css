@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ck-toolbar .ck-button__label {
+    display: none;
+}

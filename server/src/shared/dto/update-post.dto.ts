@@ -13,5 +13,10 @@ export class UpdatePostDto {
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
+  image?: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
   description?: string;
 }

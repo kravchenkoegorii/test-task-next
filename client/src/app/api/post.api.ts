@@ -32,7 +32,6 @@ export const deletePost = async (id: string): Promise<any> => {
 
 export const uploadImage = async (formData: FormData): Promise<any> => {
     try {
-        console.log(formData);
         const imageResponse = await fetch(`${API_URL}/images`, {
             method: 'POST',
             body: formData,
@@ -44,9 +43,19 @@ export const uploadImage = async (formData: FormData): Promise<any> => {
     }
 }
 
+export const deleteImage = async (id: string): Promise<any> => {
+    try {
+        await fetch(`${API_URL}/images/${id}`, {
+            method: 'DELETE',
+        });
+    } catch (error) {
+        console.error('Failed to delete image', error);
+        throw error;
+    }
+}
+
 export const createPost = async (post: any): Promise<any> => {
     try {
-        console.log(post);
         const postResponse = await fetch(`${API_URL}/posts`, {
             method: 'POST',
             headers: {
@@ -57,6 +66,22 @@ export const createPost = async (post: any): Promise<any> => {
         return await postResponse.json();
     } catch (error) {
         console.error('Failed to create post', error);
+        throw error;
+    }
+}
+
+export const updatePost = async (id: string, post: any): Promise<any> => {
+    try {
+        const postResponse = await fetch(`${API_URL}/posts/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(post),
+        });
+        return await postResponse.json();
+    } catch (error) {
+        console.error('Failed to update post', error);
         throw error;
     }
 }
