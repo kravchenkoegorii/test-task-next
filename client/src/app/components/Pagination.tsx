@@ -74,7 +74,7 @@ const ClientSidePagination = ({initialPosts, initialTotalPages}: ClientSidePagin
                 >
                     Previous
                 </button>
-                <span>Page {page} of {totalPages}</span>
+                <span className="flex items-center">Page {page} of {totalPages}</span>
                 <button
                     onClick={handleNextPage}
                     disabled={page === totalPages}
