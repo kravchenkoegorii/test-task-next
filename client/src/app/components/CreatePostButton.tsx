@@ -74,7 +74,7 @@ const CreatePostButton: React.FC = () => {
                         <div className="flex justify-end">
                             <button
                                 onClick={async () => await handleCreatePost()}
-                                className="bg-green-600 text-white px-4 py-2 rounded mr-2 hover:bg-green-700"
+                                className="bg-gray-600 text-white px-4 py-2 rounded mr-2 hover:bg-gray-700"
                             >
                                 Create
                             </button>
