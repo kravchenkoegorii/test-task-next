@@ -34,37 +34,29 @@ const AdminPage = () => {
     };
 
     const handleDeleteSelected = async () => {
-        try {
-            if (setEditedPosts.length > 0) {
-                await bulkDeletePosts(selectedPosts);
-                setSelectedPosts([]);
-                alert('Posts deleted successfully');
+        if (setEditedPosts.length > 0) {
+            await bulkDeletePosts(selectedPosts);
+            setSelectedPosts([]);
+            alert('Posts deleted successfully');
 
-                const updatedPosts = await fetchPosts();
-                setPosts(updatedPosts);
-            }
-        } catch (error) {
-            console.error('Error deleting posts:', error);
+            const updatedPosts = await fetchPosts();
+            setPosts(updatedPosts);
         }
     };
 
     const handleSaveEdits = async () => {
-        try {
-            const updates = Object.entries(editedPosts).map(([id, updateData]) => ({
-                id,
-                updateData,
-            }));
+        const updates = Object.entries(editedPosts).map(([id, updateData]) => ({
+            id,
+            updateData,
+        }));
 
-            if (updates.length > 0) {
-                await bulkUpdatePosts(updates);
-                setEditedPosts({});
-                alert('Posts updated successfully.');
+        if (updates.length > 0) {
+            await bulkUpdatePosts(updates);
+            setEditedPosts({});
+            alert('Posts updated successfully.');
 
-                const updatedPosts = await fetchPosts();
-                setPosts(updatedPosts);
-            }
-        } catch (error) {
-            console.error('Error updating posts:', error);
+            const updatedPosts = await fetchPosts();
+            setPosts(updatedPosts);
         }
     };
 
