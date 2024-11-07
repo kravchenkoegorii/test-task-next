@@ -7,7 +7,7 @@ const HomePage = async () => {
     return (
         <div>
             <ClientSidePagination initialPosts={postsResponse?.data || []}
-                                  initialTotalPages={postsResponse?.totalPages || 0}/>
+                                  initialTotalPages={postsResponse?.totalPages || []}/>
         </div>
     );
 };

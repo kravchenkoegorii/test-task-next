@@ -2,19 +2,21 @@ version: '3.9'
 
 services:
   blog-frontend:
+    container_name: blog-frontend
     build:
       context: client
       dockerfile: Dockerfile
     ports:
       - '4000:4000'
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:3000
+      NEXT_PUBLIC_API_URL: http://blog-backend:3000
     depends_on:
       - blog-backend
     networks:
       - blog-network
 
   blog-backend:
+    container_name: blog-backend
     build:
       context: server
       dockerfile: Dockerfile
