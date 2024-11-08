@@ -24,6 +24,7 @@ services:
       - '3000:3000'
     environment:
       PORT: 3000
+      IS_LOCAL: yes
       MONGODB_HOST: blog-mongodb
       MONGODB_PORT: 27017
       MONGODB_USER: user
